@@ -1,0 +1,21 @@
+.popup__form {
+  display: block;
+  width: 358px;
+  height: 27px;
+  margin: 0 auto 30px;
+  font-family: inherit;
+  border: none;
+  border-bottom: 1px solid #545454;
+}
+
+.popup__form:last-child {
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 678px) {
+
+  .popup__form {
+    width: 238px;
+  }
+
+}

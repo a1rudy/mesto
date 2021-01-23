@@ -7,19 +7,19 @@
   background-image: url(../../../images/popup/popup__close-button.svg);
   background-position: center;
   background-size: auto;
-  background-color: #000;
+  background-color: rgb(0, 0, 0, 0);
   border: none;
 }
 
 .popup__close-button:hover {
-  background-image: url(../../../images/popup/popup__close-button_hover.svg);
+  opacity: .6;
 }
 
 .popup__close-button:focus {
   outline: none;
 }
 
-@media screen and (max-width: 678px) {
+@media screen and (max-width: 700px) {
 
   .popup__close-button {
     width: 26px;

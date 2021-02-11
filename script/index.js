@@ -29,8 +29,12 @@ const popupProfile = document.querySelector('.popup_type_profile');
 const popupMesto = document.querySelector('.popup_type_mesto');
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
-let topInput = document.querySelector('.popup__form_type_top');
-let bottomInput = document.querySelector('.popup__form_type_bottom');
+const formsMesto = popupMesto.querySelector('.popup__forms');
+
+const topInputProfile = popupProfile.querySelector('.popup__form_type_top');
+const bottomInputProfile = popupProfile.querySelector('.popup__form_type_bottom');
+const topInputMesto = popupMesto.querySelector('.popup__form_type_top');
+const bottomInputMesto = popupMesto.querySelector('.popup__form_type_bottom');
 
 const editButtonProfile = document.querySelector('.profile__edit-button');
 const closeButtonProfile = popupProfile.querySelector('.popup__close-button');
@@ -44,7 +48,7 @@ const addName = document.querySelector('.profile__name');
 const addJob = document.querySelector('.profile__description');
 
 const template = document.querySelector('.template');
-const ElContainer = document.querySelector('.elements');
+const elContainer = document.querySelector('.elements');
 
 function openPopup(formType) {
   formType.classList.add('popup_opened');
@@ -53,41 +57,34 @@ function openPopup(formType) {
 
 function closePopup(formType) {
   formType.classList.remove('popup_opened');
-
-  topInput.value = ''
-  bottomInput.value = ''
 }
 //реализация закрытия попапа
 
 function formSubmitHandlerProfile(evt) {
   evt.preventDefault();
 
-  addName.textContent = topInput.value;
-  addJob.textContent = bottomInput.value;
+  addName.textContent = topInputProfile.value;
+  addJob.textContent = bottomInputProfile.value;
 
-  popupProfile.classList.remove('popup_opened');
+  closePopup(popupProfile);
 }
 // реализация редактирования профиля при нажатии кнопки "сохранить"
 
 function formSubmitHandlerMesto(evt) {
   evt.preventDefault();
+  
+  const inputEl = getEl({name: topInputMesto.value, link: bottomInputMesto.value});
+  elContainer.prepend(inputEl)
 
-  let topInput = popupMesto.querySelector('.popup__form_type_top');
-  let bottomInput = popupMesto.querySelector('.popup__form_type_bottom');
+  formsMesto.reset();
 
-  const inputEl = getEl({name: topInput.value, link: bottomInput.value});
-  ElContainer.prepend(inputEl);
-
-  topInput.value = '';
-  bottomInput.value = '';
-
-  popupMesto.classList.remove('popup_opened');
+  closePopup(popupMesto);
 }
 // реализация добавления элемента (карточки) с заголовком и картинкой на страницу при нажатии кнопки "добавить"
 
 function addEl() {
   const newEl = initialEl.map(getEl);
-  ElContainer.prepend(...newEl);
+  elContainer.append(...newEl);
 }
 
 function getEl(item) {
@@ -101,8 +98,7 @@ function getEl(item) {
 
   const removeElButton = templateEl.querySelector('.element__delete-button');
   removeElButton.addEventListener('click', (evt) => {
-    const delEl = evt.target.closest('.element');
-    delEl.remove();
+    evt.target.closest('.element').remove();
   });
   //реализация кнопки удаления
 
@@ -119,8 +115,7 @@ function getEl(item) {
     popupImage.alt = item.name;
     popupCaption.textContent = item.name;
   });
-  closeButtonImage.addEventListener('click', () => closePopup(popupPhotoShow));
-  // реализация открытия и закрытия попапа с картинкой
+  // реализация открытия попапа с картинкой
 
   return templateEl;
 }
@@ -128,13 +123,18 @@ function getEl(item) {
 editButtonProfile.addEventListener('click', () => {
   openPopup(popupProfile);
 
-  topInput.value = addName.textContent;
-  bottomInput.value = addJob.textContent;
+  topInputProfile.value = addName.textContent;
+  bottomInputProfile.value = addJob.textContent;
 });
 closeButtonProfile.addEventListener('click', () => closePopup(popupProfile));
 
 addButtonMesto.addEventListener('click', () => openPopup(popupMesto));
-closeButtonMesto.addEventListener('click', () => closePopup(popupMesto));
+closeButtonMesto.addEventListener('click', () => {
+  closePopup(popupMesto);
+  formsMesto.reset();
+});
+
+closeButtonImage.addEventListener('click', () => closePopup(popupPhotoShow));
 
 popupProfile.addEventListener('submit', formSubmitHandlerProfile);
 popupMesto.addEventListener('submit', formSubmitHandlerMesto);

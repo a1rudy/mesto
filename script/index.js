@@ -29,12 +29,12 @@ const popupProfile = document.querySelector('.popup_type_profile');
 const popupMesto = document.querySelector('.popup_type_mesto');
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
-const formsMesto = popupMesto.querySelector('.popup__forms');
+const formsMesto = popupMesto.querySelector('.popup__form');
 
-const topInputProfile = popupProfile.querySelector('.popup__form_type_top');
-const bottomInputProfile = popupProfile.querySelector('.popup__form_type_bottom');
-const topInputMesto = popupMesto.querySelector('.popup__form_type_top');
-const bottomInputMesto = popupMesto.querySelector('.popup__form_type_bottom');
+const topInputProfile = popupProfile.querySelector('.popup__input_type_top');
+const bottomInputProfile = popupProfile.querySelector('.popup__input_type_bottom');
+const topInputMesto = popupMesto.querySelector('.popup__input_type_top');
+const bottomInputMesto = popupMesto.querySelector('.popup__input_type_bottom');
 
 const editButtonProfile = document.querySelector('.profile__edit-button');
 const closeButtonProfile = popupProfile.querySelector('.popup__close-button');

@@ -31,10 +31,10 @@ const checkInputValidity = (formElement, inputElement) => {
 
 const toggleButtonState = (inputList, buttonElement) => {
   if (hasInvalidInput(inputList)) {
-    buttonElement.setAttribute("disabled", true);
+    buttonElement.setAttribute('disabled', true);
     buttonElement.classList.add('popup__save-button_inactive');
   } else {
-    buttonElement.removeAttribute("disabled");
+    buttonElement.removeAttribute('disabled');
     buttonElement.classList.remove('popup__save-button_inactive');
   }
 };
@@ -47,18 +47,17 @@ const hasInvalidInput = (inputList) => {
 };
 // 4.2 проверяем, все ли инпуты НЕ валидны, если да, возвращает true, если нет - false;
 
-const setEventListeners = (formElement) => {
-  formElement.addEventListener('submit',  (event) => {
+const setEventListeners = (formElement, inputSelector, submitButtonSelector) => {
+  formElement.addEventListener('submit', (event) => {
     event.preventDefault();
   });
 
-  const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+  const inputList = Array.from(formElement.querySelectorAll(inputSelector));
 
-  const buttonElement = formElement.querySelector('.popup__save-button');
+  const buttonElement = formElement.querySelector(submitButtonSelector);
 
   inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', function (/*event*/) {
-      // console.log(event.target.name);
+    inputElement.addEventListener('input', function () {
       checkInputValidity(formElement, inputElement);
       toggleButtonState(inputList, buttonElement);
     });
@@ -70,11 +69,20 @@ const setEventListeners = (formElement) => {
 // 3.1 находим все инпуты на странице и передаем им функцию на проверку валидности;
 // 3.2 вместе с редактированием инпута передаем функцию на переключение кнопки сабмита, кнопка сабмита отключена перед редактированием инпута;
 
-const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll('.popup__form'));
+const enableValidation = ({formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass}) => {
+  const formList = Array.from(document.querySelectorAll(formSelector));
   
-  formList.forEach(setEventListeners)
-}
+  formList.forEach((formElement) => {
+    setEventListeners(formElement, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass);
+  });
+};
 // 1. находим все формы на странице
 
-enableValidation();
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__save-button',
+  inactiveButtonClass: '.popup__save-button_inactive',
+  inputErrorClass: '.popup__input_type_error',
+  errorClass: '.popup__input-error_active',
+});

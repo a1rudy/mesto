@@ -127,14 +127,27 @@ editButtonProfile.addEventListener('click', () => {
   bottomInputProfile.value = addJob.textContent;
 });
 closeButtonProfile.addEventListener('click', () => closePopup(popupProfile));
+popupProfile.addEventListener('click', (evt) => {
+  if (evt.target === evt.currentTarget) closePopup(popupProfile);
+});
+popupProfile.addEventListener('keydown', (evt) => {
+  // if (evt.key == 'Esc') closePopup(popupProfile);
+  console.log(evt);
+});
 
 addButtonMesto.addEventListener('click', () => openPopup(popupMesto));
 closeButtonMesto.addEventListener('click', () => {
   closePopup(popupMesto);
   formsMesto.reset();
 });
+popupMesto.addEventListener('click', (evt) => {
+  if (evt.target === evt.currentTarget) closePopup(popupMesto);
+});
 
 closeButtonImage.addEventListener('click', () => closePopup(popupPhotoShow));
+popupPhotoShow.addEventListener('click', (evt) => {
+  if (evt.target === evt.currentTarget) closePopup(popupPhotoShow);
+});
 
 popupProfile.addEventListener('submit', formSubmitHandlerProfile);
 popupMesto.addEventListener('submit', formSubmitHandlerMesto);

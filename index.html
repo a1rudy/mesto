@@ -44,7 +44,7 @@
             <span class="popup__input-error name-input-error"></span>
           </div>
           <div class="popup__form-wrap">
-            <input class="popup__input popup__input_type_bottom" id="description-input" type="text" placeholder="О себе" name="description" minlength="2" maxlength="200">
+            <input class="popup__input popup__input_type_bottom" id="description-input" type="text" placeholder="О себе" name="description" minlength="2" maxlength="200" required>
             <span class="popup__input-error description-input-error"></span>
           </div>
           <button class="popup__save-button popup__save-button_type_profile" type="submit"><span>Сохранить</span></button>
@@ -58,11 +58,11 @@
         <h2 class="popup__title">Новое место</h2>
         <form class="popup__form" name="popup-form" novalidate>
           <div class="popup__form-wrap">
-            <input class="popup__input popup__input_type_top" id="title-input" type="text" placeholder="Название" name="title" minlength="2" maxlength="30" required required>
+            <input class="popup__input popup__input_type_top" id="title-input" type="text" placeholder="Название" name="title" minlength="2" maxlength="30" required>
             <span class="popup__input-error title-input-error"></span>
           </div>
           <div class="popup__form-wrap">
-            <input class="popup__input popup__input_type_bottom" id="link-input" type="url" placeholder="Ссылка на картинку" name="link" required required>
+            <input class="popup__input popup__input_type_bottom" id="link-input" type="url" placeholder="Ссылка на картинку" name="link" required>
             <span class="popup__input-error link-input-error"></span>
           </div>
           <button class="popup__save-button popup__save-button_type_mesto" type="submit"><span>Создать</span></button>
@@ -94,7 +94,7 @@
       </div>
     </article>
   </template>
-  
+
   <script src="./script/validate.js"></script>
   <script src="./script/index.js"></script>
   

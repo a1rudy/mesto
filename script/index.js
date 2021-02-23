@@ -30,6 +30,7 @@ const popupMesto = document.querySelector('.popup_type_mesto');
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
 const formsMesto = popupMesto.querySelector('.popup__form');
+const formsProfile = popupProfile.querySelector('.popup__form');
 
 const topInputProfile = popupProfile.querySelector('.popup__input_type_top');
 const bottomInputProfile = popupProfile.querySelector('.popup__input_type_bottom');
@@ -50,15 +51,27 @@ const addJob = document.querySelector('.profile__description');
 const template = document.querySelector('.template');
 const elContainer = document.querySelector('.elements');
 
-function openPopup(formType) {
-  formType.classList.add('popup_opened');
+function openPopup(popupType) {
+  popupType.classList.add('popup_opened');
+  document.addEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
 }
 //реализация открытия попапа
 
-function closePopup(formType) {
-  formType.classList.remove('popup_opened');
+function closePopup(popupType) {
+  popupType.classList.remove('popup_opened');
+  document.removeEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
 }
 //реализация закрытия попапа
+
+function closePopupByEsc (evt, popupType) {
+  evt.key == 'Escape' ? closePopup(popupType) : false;
+}
+// реализация условия закрытия попапа по кнопке Esc
+
+function closePopupByOverlay (evt, popupType) {
+  evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? closePopup(popupType) : false;
+}
+// реализация условия закрытия попапа по клику на оверлей и кнопку зыкрытия
 
 function formSubmitHandlerProfile(evt) {
   evt.preventDefault();
@@ -103,7 +116,7 @@ function getEl(item) {
   //реализация кнопки удаления
 
   const likeElButton = templateEl.querySelector('.element__like-button');
-  likeElButton.addEventListener('click', evt => evt.target.classList.toggle('element__like-button_active'));
+  likeElButton.addEventListener('click', (evt) => evt.target.classList.toggle('element__like-button_active'));
   // реализация кнопки лайка
 
   imgEl.addEventListener('click', () => {
@@ -126,28 +139,17 @@ editButtonProfile.addEventListener('click', () => {
   topInputProfile.value = addName.textContent;
   bottomInputProfile.value = addJob.textContent;
 });
-closeButtonProfile.addEventListener('click', () => closePopup(popupProfile));
 popupProfile.addEventListener('click', (evt) => {
-  if (evt.target === evt.currentTarget) closePopup(popupProfile);
-});
-popupProfile.addEventListener('keydown', (evt) => {
-  // if (evt.key == 'Esc') closePopup(popupProfile);
-  console.log(evt);
+  closePopupByOverlay(evt, popupProfile);
 });
 
 addButtonMesto.addEventListener('click', () => openPopup(popupMesto));
-closeButtonMesto.addEventListener('click', () => {
-  closePopup(popupMesto);
-  formsMesto.reset();
-});
 popupMesto.addEventListener('click', (evt) => {
-  if (evt.target === evt.currentTarget) closePopup(popupMesto);
+  closePopupByOverlay(evt, popupMesto);
+  evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? formsMesto.reset() : false;
 });
 
-closeButtonImage.addEventListener('click', () => closePopup(popupPhotoShow));
-popupPhotoShow.addEventListener('click', (evt) => {
-  if (evt.target === evt.currentTarget) closePopup(popupPhotoShow);
-});
+popupPhotoShow.addEventListener('click', (evt) => closePopupByOverlay(evt, popupPhotoShow))
 
 popupProfile.addEventListener('submit', formSubmitHandlerProfile);
 popupMesto.addEventListener('submit', formSubmitHandlerMesto);

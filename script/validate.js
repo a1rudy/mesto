@@ -1,5 +1,4 @@
 const showInputError = (formElement, inputElement, errorMessage, inputErrorClass, errorClass) => {
-  // console.log(inputElement.name, errorMessage);
   const errorELement = formElement.querySelector(`.${inputElement.id}-error`);
 
   inputElement.classList.add(inputErrorClass);
@@ -15,7 +14,7 @@ const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) 
   errorELement.classList.remove(errorClass);
   errorELement.textContent = '';
 };
-// 6.1 функция на удаление текста ошибки про валидном инпуте
+// 6.1 функция на удаление текста ошибки при валидном инпуте
 
 const checkInputValidity = (formElement, inputElement, inputErrorClass, errorClass) => {
   const isInputElementValid = inputElement.validity.valid

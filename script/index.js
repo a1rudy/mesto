@@ -51,24 +51,33 @@ const addJob = document.querySelector('.profile__description');
 const template = document.querySelector('.template');
 const elContainer = document.querySelector('.elements');
 
-function openPopup(popupType) {
+function openPopup(popupType, {formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass}) {
   popupType.classList.add('popup_opened');
+  
+  const inputList = Array.from(popupType.querySelectorAll(inputSelector));
+  const formElement = popupType.querySelector(formSelector);
+  const buttonElement = popupType.querySelector(submitButtonSelector);
+  inputList.forEach((inputElement) => {
+      hideInputError(formElement, inputElement, inputErrorClass, errorClass);
+      toggleButtonState(inputList, buttonElement, inactiveButtonClass);
+  });
+  
   document.addEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
 }
-//реализация открытия попапа
+// реализация открытия попапа
 
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
   document.removeEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
 }
-//реализация закрытия попапа
+// реализация закрытия попапа
 
 function closePopupByEsc (evt, popupType) {
   evt.key == 'Escape' ? closePopup(popupType) : false;
 }
 // реализация условия закрытия попапа по кнопке Esc
 
-function closePopupByOverlay (evt, popupType) {
+function closePopupByOverlay(evt, popupType) {
   evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? closePopup(popupType) : false;
 }
 // реализация условия закрытия попапа по клику на оверлей и кнопку зыкрытия
@@ -120,7 +129,7 @@ function getEl(item) {
   // реализация кнопки лайка
 
   imgEl.addEventListener('click', () => {
-    openPopup(popupPhotoShow);
+    openPopup(popupPhotoShow, validationConfig);
     
     const popupImage = popupPhotoShow.querySelector('.popup__image');
     const popupCaption = popupPhotoShow.querySelector('.popup__caption');
@@ -134,16 +143,16 @@ function getEl(item) {
 }
 
 editButtonProfile.addEventListener('click', () => {
-  openPopup(popupProfile);
-
   topInputProfile.value = addName.textContent;
   bottomInputProfile.value = addJob.textContent;
+
+  openPopup(popupProfile, validationConfig);
 });
 popupProfile.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupProfile);
 });
 
-addButtonMesto.addEventListener('click', () => openPopup(popupMesto));
+addButtonMesto.addEventListener('click', () => openPopup(popupMesto, validationConfig));
 popupMesto.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupMesto);
   evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? formsMesto.reset() : false;

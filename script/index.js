@@ -58,13 +58,13 @@ function openPopup(popupType, {formSelector, inputSelector, submitButtonSelector
   const formElement = popupType.querySelector(formSelector);
   const buttonElement = popupType.querySelector(submitButtonSelector);
   inputList.forEach((inputElement) => {
-      hideInputError(formElement, inputElement, inputErrorClass, errorClass);
-      toggleButtonState(inputList, buttonElement, inactiveButtonClass);
+    toggleButtonState(inputList, buttonElement, inactiveButtonClass);
+    hideInputError(formElement, inputElement, inputErrorClass, errorClass);
   });
   
   document.addEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
 }
-// реализация открытия попапа
+// реализация открытия попапа с проверкой работы кнопки "сабмит" (в т.ч. при первом открытии попапа) в зависимости от наличия заполненного текста в инпуте
 
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
@@ -151,14 +151,17 @@ editButtonProfile.addEventListener('click', () => {
 popupProfile.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupProfile);
 });
+// слушатели на открытие и закрытие попапа профиля
 
 addButtonMesto.addEventListener('click', () => openPopup(popupMesto, validationConfig));
 popupMesto.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupMesto);
   evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? formsMesto.reset() : false;
 });
+// слушатели на открытие и закрытие попапа добавления места
 
 popupPhotoShow.addEventListener('click', (evt) => closePopupByOverlay(evt, popupPhotoShow))
+// слушатель на закрытие попапа показа места
 
 popupProfile.addEventListener('submit', formSubmitHandlerProfile);
 popupMesto.addEventListener('submit', formSubmitHandlerMesto);

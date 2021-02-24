@@ -1,30 +1,3 @@
-const initialEl = [
-  {
-    name: 'Байкал',
-    link: 'https://images.unsplash.com/photo-1552735855-557bdba3961a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=635&q=80'
-  },
-  {
-    name: 'Алтай',
-    link: 'https://images.unsplash.com/photo-1564324738191-7f91304232eb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-  },
-  {
-    name: 'Куршская дуга',
-    link: 'https://images.unsplash.com/photo-1611056091165-cb3258bb0b44?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80'
-  },
-  {
-    name: 'Карелия',
-    link: 'https://images.unsplash.com/photo-1573156667506-115190c68737?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=675&q=80'
-  },
-  {
-    name: 'Камчатский край',
-    link: 'https://images.unsplash.com/photo-1535557142533-b5e1cc6e2a5d?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1602&q=80'
-  },
-  {
-    name: 'Гора Эльбрус',
-    link: 'https://images.unsplash.com/photo-1521311587563-6a3fb9fbaff7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
-  },
-];
-
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupMesto = document.querySelector('.popup_type_mesto');
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
@@ -51,29 +24,21 @@ const addJob = document.querySelector('.profile__description');
 const template = document.querySelector('.template');
 const elContainer = document.querySelector('.elements');
 
-function openPopup(popupType, {formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass}) {
+function openPopup(popupType) {
   popupType.classList.add('popup_opened');
-  
-  const inputList = Array.from(popupType.querySelectorAll(inputSelector));
-  const formElement = popupType.querySelector(formSelector);
-  const buttonElement = popupType.querySelector(submitButtonSelector);
-  inputList.forEach((inputElement) => {
-    toggleButtonState(inputList, buttonElement, inactiveButtonClass);
-    hideInputError(formElement, inputElement, inputErrorClass, errorClass);
-  });
-  
-  document.addEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
+  document.addEventListener('keydown', closePopupByEsc);
 }
-// реализация открытия попапа с проверкой работы кнопки "сабмит" (в т.ч. при первом открытии попапа) в зависимости от наличия заполненного текста в инпуте
+// реализация открытия попапа
 
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
-  document.removeEventListener('keydown', (evt) => closePopupByEsc(evt, popupType));
+  document.removeEventListener('keydown', closePopupByEsc);
 }
 // реализация закрытия попапа
 
-function closePopupByEsc (evt, popupType) {
-  evt.key == 'Escape' ? closePopup(popupType) : false;
+function closePopupByEsc(evt) {
+  const popupOpened = document.querySelector('.popup_opened')
+  evt.key == 'Escape' ? closePopup(popupOpened) : false;
 }
 // реализация условия закрытия попапа по кнопке Esc
 
@@ -82,7 +47,7 @@ function closePopupByOverlay(evt, popupType) {
 }
 // реализация условия закрытия попапа по клику на оверлей и кнопку зыкрытия
 
-function formSubmitHandlerProfile(evt) {
+function editProfileBySubmit(evt) {
   evt.preventDefault();
 
   addName.textContent = topInputProfile.value;
@@ -92,7 +57,7 @@ function formSubmitHandlerProfile(evt) {
 }
 // реализация редактирования профиля при нажатии кнопки "сохранить"
 
-function formSubmitHandlerMesto(evt) {
+function addMestoBySubmit(evt) {
   evt.preventDefault();
   
   const inputEl = getEl({name: topInputMesto.value, link: bottomInputMesto.value});
@@ -129,7 +94,7 @@ function getEl(item) {
   // реализация кнопки лайка
 
   imgEl.addEventListener('click', () => {
-    openPopup(popupPhotoShow, validationConfig);
+    openPopup(popupPhotoShow);
     
     const popupImage = popupPhotoShow.querySelector('.popup__image');
     const popupCaption = popupPhotoShow.querySelector('.popup__caption');
@@ -146,14 +111,18 @@ editButtonProfile.addEventListener('click', () => {
   topInputProfile.value = addName.textContent;
   bottomInputProfile.value = addJob.textContent;
 
-  openPopup(popupProfile, validationConfig);
+  openPopup(popupProfile);
+  checkButtonStateOpenPopup(popupProfile, validationConfig);
 });
 popupProfile.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupProfile);
 });
 // слушатели на открытие и закрытие попапа профиля
 
-addButtonMesto.addEventListener('click', () => openPopup(popupMesto, validationConfig));
+addButtonMesto.addEventListener('click', () => {
+  openPopup(popupMesto);
+  checkButtonStateOpenPopup(popupMesto, validationConfig);
+});
 popupMesto.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupMesto);
   evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? formsMesto.reset() : false;
@@ -163,7 +132,7 @@ popupMesto.addEventListener('click', (evt) => {
 popupPhotoShow.addEventListener('click', (evt) => closePopupByOverlay(evt, popupPhotoShow))
 // слушатель на закрытие попапа показа места
 
-popupProfile.addEventListener('submit', formSubmitHandlerProfile);
-popupMesto.addEventListener('submit', formSubmitHandlerMesto);
+popupProfile.addEventListener('submit', editProfileBySubmit);
+popupMesto.addEventListener('submit', addMestoBySubmit);
 
 addEl();

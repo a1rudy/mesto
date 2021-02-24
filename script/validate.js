@@ -46,6 +46,17 @@ const hasInvalidInput = (inputList) => {
 };
 // 4.2 проверяем, все ли инпуты НЕ валидны, если да, возвращает true, если нет - false;
 
+function checkButtonStateOpenPopup(popupType, {formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass}) {
+  const inputList = Array.from(popupType.querySelectorAll(inputSelector));
+  const formElement = popupType.querySelector(formSelector);
+  const buttonElement = popupType.querySelector(submitButtonSelector);
+  inputList.forEach((inputElement) => {
+    toggleButtonState(inputList, buttonElement, inactiveButtonClass);
+    hideInputError(formElement, inputElement, inputErrorClass, errorClass);
+  });
+}
+// проверка состояния кнопки сабмит при открытии попапа
+
 const setEventListeners = (formElement, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass) => {
   formElement.addEventListener('submit', (event) => {
     event.preventDefault();

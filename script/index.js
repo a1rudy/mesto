@@ -1,9 +1,21 @@
+import {initialEl} from './variable.js'
+import Card from './Card.js'
+import FormValidator from './FormValidator.js'
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__save-button',
+  inactiveButtonClass: 'popup__save-button_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+};
+
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupMesto = document.querySelector('.popup_type_mesto');
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
 const formsMesto = popupMesto.querySelector('.popup__form');
-const formsProfile = popupProfile.querySelector('.popup__form');
 
 const topInputProfile = popupProfile.querySelector('.popup__input_type_top');
 const bottomInputProfile = popupProfile.querySelector('.popup__input_type_bottom');
@@ -11,17 +23,12 @@ const topInputMesto = popupMesto.querySelector('.popup__input_type_top');
 const bottomInputMesto = popupMesto.querySelector('.popup__input_type_bottom');
 
 const editButtonProfile = document.querySelector('.profile__edit-button');
-const closeButtonProfile = popupProfile.querySelector('.popup__close-button');
 
 const addButtonMesto = document.querySelector('.profile__add-button');
-const closeButtonMesto = popupMesto.querySelector('.popup__close-button');
-
-const closeButtonImage = popupPhotoShow.querySelector('.popup__close-button')
 
 const addName = document.querySelector('.profile__name');
 const addJob = document.querySelector('.profile__description');
 
-const template = document.querySelector('.template');
 const elContainer = document.querySelector('.elements');
 
 function openPopup(popupType) {
@@ -59,9 +66,9 @@ function editProfileBySubmit(evt) {
 
 function addMestoBySubmit(evt) {
   evt.preventDefault();
-  
-  const inputEl = getEl({name: topInputMesto.value, link: bottomInputMesto.value});
-  elContainer.prepend(inputEl)
+
+  const cardEl = new Card({name: topInputMesto.value, link: bottomInputMesto.value}, '.template_type_default').generateCard();
+  elContainer.prepend(cardEl);
 
   formsMesto.reset();
 
@@ -69,50 +76,12 @@ function addMestoBySubmit(evt) {
 }
 // реализация добавления элемента (карточки) с заголовком и картинкой на страницу при нажатии кнопки "добавить"
 
-function addEl() {
-  const newEl = initialEl.map(getEl);
-  elContainer.append(...newEl);
-}
-
-function getEl(item) {
-  const templateEl = template.content.cloneNode(true);
-  const imgEl = templateEl.querySelector('.element__image');
-  const titleEl = templateEl.querySelector('.element__title')
-  imgEl.src = item.link;
-  imgEl.alt = item.name;
-  titleEl.textContent = item.name;
-  // реализация элементов (карточек) через клонирование массива
-
-  const removeElButton = templateEl.querySelector('.element__delete-button');
-  removeElButton.addEventListener('click', (evt) => {
-    evt.target.closest('.element').remove();
-  });
-  //реализация кнопки удаления
-
-  const likeElButton = templateEl.querySelector('.element__like-button');
-  likeElButton.addEventListener('click', (evt) => evt.target.classList.toggle('element__like-button_active'));
-  // реализация кнопки лайка
-
-  imgEl.addEventListener('click', () => {
-    openPopup(popupPhotoShow);
-    
-    const popupImage = popupPhotoShow.querySelector('.popup__image');
-    const popupCaption = popupPhotoShow.querySelector('.popup__caption');
-    popupImage.src = item.link;
-    popupImage.alt = item.name;
-    popupCaption.textContent = item.name;
-  });
-  // реализация открытия попапа с картинкой
-
-  return templateEl;
-}
-
 editButtonProfile.addEventListener('click', () => {
   topInputProfile.value = addName.textContent;
   bottomInputProfile.value = addJob.textContent;
 
   openPopup(popupProfile);
-  checkButtonStateOpenPopup(popupProfile, validationConfig);
+  new FormValidator(validationConfig, '.popup__form_type_profile').enableValidation()
 });
 popupProfile.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupProfile);
@@ -121,7 +90,7 @@ popupProfile.addEventListener('click', (evt) => {
 
 addButtonMesto.addEventListener('click', () => {
   openPopup(popupMesto);
-  checkButtonStateOpenPopup(popupMesto, validationConfig);
+  new FormValidator(validationConfig, '.popup__form_type_mesto').enableValidation()
 });
 popupMesto.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupMesto);
@@ -134,5 +103,13 @@ popupPhotoShow.addEventListener('click', (evt) => closePopupByOverlay(evt, popup
 
 popupProfile.addEventListener('submit', editProfileBySubmit);
 popupMesto.addEventListener('submit', addMestoBySubmit);
+
+new FormValidator(validationConfig, '.popup__form').enableValidation()
+
+const addEl = () => initialEl.forEach(item => {
+  const cardEl = new Card(item, '.template_type_default').generateCard();
+
+  elContainer.append(cardEl);
+});
 
 addEl();

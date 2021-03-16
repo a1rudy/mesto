@@ -1,4 +1,4 @@
-const initialEl = [
+export const initialEl = [
   {
     name: 'Байкал',
     link: 'https://images.unsplash.com/photo-1552735855-557bdba3961a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=635&q=80'

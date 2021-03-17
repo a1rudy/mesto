@@ -22,7 +22,7 @@ export default class Card {
   }
 
   _getRemoveEl() {
-    this._element.querySelector('.element__delete-button').closest('.element').remove();
+    this._element.remove();
   }
 
   _generatePopupEl() {
@@ -50,7 +50,7 @@ export default class Card {
     const imgEl = this._element.querySelector('.element__image');
     titleEl.textContent = this._name;
     imgEl.src = this._link;
-    imgEl.alt = this._name;
+    imgEl.alt = `Это ${this._name}? Не похоже) Введите корректную ссылку.`;
     
     this._setEventListeners();
 

@@ -1,4 +1,4 @@
-export {popupPhotoShow, openPopup}
+export {popupPhotoShow, openPopup, closePopup}
 
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
@@ -13,6 +13,7 @@ function closePopup(popupType) {
 }
 
 function closePopupByEsc(evt) {
-  const popupOpened = document.querySelector('.popup_opened')
-  evt.key == 'Escape' ? closePopup(popupOpened) : false;
+  const popupOpened = document.querySelector('.popup_opened');
+  const esc = 'Escape';
+  evt.key == esc ? closePopup(popupOpened) : false;
 }

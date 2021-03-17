@@ -1,3 +1,4 @@
+import {popupPhotoShow, openPopup, closePopup} from './utils.js'
 import {initialEl} from './variable.js'
 import Card from './Card.js'
 import FormValidator from './FormValidator.js'
@@ -13,7 +14,6 @@ const validationConfig = {
 
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupMesto = document.querySelector('.popup_type_mesto');
-const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
 const formsMesto = popupMesto.querySelector('.popup__form');
 
@@ -30,24 +30,6 @@ const addName = document.querySelector('.profile__name');
 const addJob = document.querySelector('.profile__description');
 
 const elContainer = document.querySelector('.elements');
-
-function openPopup(popupType) {
-  popupType.classList.add('popup_opened');
-  document.addEventListener('keydown', closePopupByEsc);
-}
-// реализация открытия попапа
-
-function closePopup(popupType) {
-  popupType.classList.remove('popup_opened');
-  document.removeEventListener('keydown', closePopupByEsc);
-}
-// реализация закрытия попапа
-
-function closePopupByEsc(evt) {
-  const popupOpened = document.querySelector('.popup_opened')
-  evt.key == 'Escape' ? closePopup(popupOpened) : false;
-}
-// реализация условия закрытия попапа по кнопке Esc
 
 function closePopupByOverlay(evt, popupType) {
   evt.target === evt.currentTarget || evt.target.classList.contains('popup__close-button') ? closePopup(popupType) : false;
@@ -81,16 +63,16 @@ editButtonProfile.addEventListener('click', () => {
   bottomInputProfile.value = addJob.textContent;
 
   openPopup(popupProfile);
-  new FormValidator(validationConfig, '.popup__form_type_profile').enableValidation()
+  new FormValidator(validationConfig, '.popup__form_type_profile').checkButtonStateOpenPopup()
 });
-popupProfile.addEventListener('click', (evt) => {
+popupProfile.addEventListener('mousedown', (evt) => {
   closePopupByOverlay(evt, popupProfile);
 });
 // слушатели на открытие и закрытие попапа профиля
 
 addButtonMesto.addEventListener('click', () => {
   openPopup(popupMesto);
-  new FormValidator(validationConfig, '.popup__form_type_mesto').enableValidation()
+  new FormValidator(validationConfig, '.popup__form_type_mesto').checkButtonStateOpenPopup()
 });
 popupMesto.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupMesto);
@@ -104,7 +86,8 @@ popupPhotoShow.addEventListener('click', (evt) => closePopupByOverlay(evt, popup
 popupProfile.addEventListener('submit', editProfileBySubmit);
 popupMesto.addEventListener('submit', addMestoBySubmit);
 
-new FormValidator(validationConfig, '.popup__form').enableValidation()
+new FormValidator(validationConfig, '.popup__form_type_profile').enableValidation()
+new FormValidator(validationConfig, '.popup__form_type_mesto').enableValidation()
 
 const addEl = () => initialEl.forEach(item => {
   const cardEl = new Card(item, '.template_type_default').generateCard();

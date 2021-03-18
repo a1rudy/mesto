@@ -63,7 +63,7 @@ editButtonProfile.addEventListener('click', () => {
   bottomInputProfile.value = addJob.textContent;
 
   openPopup(popupProfile);
-  new FormValidator(validationConfig, '.popup__form_type_profile').checkButtonStateOpenPopup()
+  formProfileValidator.checkButtonStateOpenPopup();
 });
 popupProfile.addEventListener('mousedown', (evt) => {
   closePopupByOverlay(evt, popupProfile);
@@ -72,7 +72,7 @@ popupProfile.addEventListener('mousedown', (evt) => {
 
 addButtonMesto.addEventListener('click', () => {
   openPopup(popupMesto);
-  new FormValidator(validationConfig, '.popup__form_type_mesto').checkButtonStateOpenPopup()
+  formCardValidator.checkButtonStateOpenPopup();
 });
 popupMesto.addEventListener('click', (evt) => {
   closePopupByOverlay(evt, popupMesto);
@@ -86,8 +86,11 @@ popupPhotoShow.addEventListener('click', (evt) => closePopupByOverlay(evt, popup
 popupProfile.addEventListener('submit', editProfileBySubmit);
 popupMesto.addEventListener('submit', addMestoBySubmit);
 
-new FormValidator(validationConfig, '.popup__form_type_profile').enableValidation()
-new FormValidator(validationConfig, '.popup__form_type_mesto').enableValidation()
+const formProfileValidator = new FormValidator(validationConfig, '.popup__form_type_profile');
+formProfileValidator.enableValidation();
+
+const formCardValidator = new FormValidator(validationConfig, '.popup__form_type_mesto');
+formCardValidator.enableValidation();
 
 const addEl = () => initialEl.forEach(item => {
   const cardEl = new Card(item, '.template_type_default').generateCard();

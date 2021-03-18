@@ -2,6 +2,8 @@ export {popupPhotoShow, openPopup, closePopup}
 
 const popupPhotoShow = document.querySelector('.popup_type_photoShow');
 
+const esc = 'Escape';
+
 function openPopup(popupType) {
   popupType.classList.add('popup_opened');
   document.addEventListener('keydown', closePopupByEsc);
@@ -14,6 +16,5 @@ function closePopup(popupType) {
 
 function closePopupByEsc(evt) {
   const popupOpened = document.querySelector('.popup_opened');
-  const esc = 'Escape';
   evt.key == esc ? closePopup(popupOpened) : false;
 }

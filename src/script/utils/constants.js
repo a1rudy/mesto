@@ -1,9 +1,9 @@
-const elbrus = new URL('../../images/element/1-element__image-elbrus.jpg', import.meta.url);
-const altai = new URL('../../images/element/2-element__image-altai.jpg', import.meta.url);
-const duga = new URL('../../images/element/3-element__image-duga.jpg', import.meta.url);
-const karelia = new URL('../../images/element/4-element__image-karelia.jpg', import.meta.url);
-const kamchatka = new URL('../../images/element/5-element__image-kamchatka.jpg', import.meta.url);
-const baikal = new URL('../../images/element/6-element__image-baikal.jpg', import.meta.url);
+const elbrus = new URL('../../images/element/1_element__image-elbrus.jpg', import.meta.url);
+const altai = new URL('../../images/element/2_element__image-altai.jpg', import.meta.url);
+const duga = new URL('../../images/element/3_element__image-duga.jpg', import.meta.url);
+const karelia = new URL('../../images/element/4_element__image-karelia.jpg', import.meta.url);
+const kamchatka = new URL('../../images/element/5_element__image-kamchatka.jpg', import.meta.url);
+const baikal = new URL('../../images/element/6_element__image-baikal.jpg', import.meta.url);
 
 export const initialEl = [
   {

@@ -1,33 +1,34 @@
+const elbrus = new URL('../../images/element/1-element__image-elbrus.jpg', import.meta.url);
+const altai = new URL('../../images/element/2-element__image-altai.jpg', import.meta.url);
+const duga = new URL('../../images/element/3-element__image-duga.jpg', import.meta.url);
+const karelia = new URL('../../images/element/4-element__image-karelia.jpg', import.meta.url);
+const kamchatka = new URL('../../images/element/5-element__image-kamchatka.jpg', import.meta.url);
+const baikal = new URL('../../images/element/6-element__image-baikal.jpg', import.meta.url);
+
 export const initialEl = [
   {
     name: "Байкал",
-    link:
-      "https://images.unsplash.com/photo-1552735855-557bdba3961a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=635&q=80",
+    link: baikal
   },
   {
     name: "Алтай",
-    link:
-      "https://images.unsplash.com/photo-1564324738191-7f91304232eb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    link: altai,
   },
   {
     name: "Куршская дуга",
-    link:
-      "https://images.unsplash.com/photo-1611056091165-cb3258bb0b44?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=675&q=80",
+    link: duga,
   },
   {
     name: "Карелия",
-    link:
-      "https://images.unsplash.com/photo-1573156667506-115190c68737?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=675&q=80",
+    link: karelia,
   },
   {
     name: "Камчатский край",
-    link:
-      "https://images.unsplash.com/photo-1535557142533-b5e1cc6e2a5d?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1602&q=80",
+    link: kamchatka,
   },
   {
     name: "Гора Эльбрус",
-    link:
-      "https://images.unsplash.com/photo-1521311587563-6a3fb9fbaff7?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    link: elbrus,
   },
 ];
 

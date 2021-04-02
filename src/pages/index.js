@@ -54,7 +54,7 @@ cardList.renderItems();
 popupImage.setEventListeners();
 
 // Инициализация класса по добалению данных пользователя
-const userInfo = new UserInfo();
+const userInfo = new UserInfo(".profile__name", ".profile__description");
 
 // Инициализация попапа Профиль
 const popupProfile = new PopupWithForm({

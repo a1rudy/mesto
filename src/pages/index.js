@@ -1,4 +1,4 @@
-import '../../pages/index.css';
+import './index.css';
 
 import {
   initialEl,
@@ -8,13 +8,13 @@ import {
   editButtonProfile,
   addButtonMesto,
   elContainer,
-} from "../utils/constants.js";
-import FormValidator from "../components/FormValidator.js";
-import Section from "../components/Section.js";
-import Card from "../components/Card.js";
-import PopupWithImage from "../components/PopupWithImage.js";
-import PopupWithForm from "../components/PopupWithForm.js";
-import UserInfo from "../components/UserInfo.js";
+} from "../script/utils/constants.js";
+import FormValidator from "../script/components/FormValidator.js";
+import Section from "../script/components/Section.js";
+import Card from "../script/components/Card.js";
+import PopupWithImage from "../script/components/PopupWithImage.js";
+import PopupWithForm from "../script/components/PopupWithForm.js";
+import UserInfo from "../script/components/UserInfo.js";
 
 // Активация валидации форм
 const formProfileValidator = new FormValidator(
@@ -29,19 +29,23 @@ const formCardValidator = new FormValidator(
 );
 formCardValidator.enableValidation();
 
+// Функция создания карточки
+const createCardEl = (item) => {
+  return new Card(item, ".template_type_default", (data) => {
+    popupImage.open(data);
+  }).generateCard();
+}
+
 // Инициализация попапа Изображение
 const popupImage = new PopupWithImage(".popup_type_image");
 
-// добавление карточек на страницу из массива
+// Добавление карточек на страницу из массива
 const cardList = new Section(
   {
     itemsArr: initialEl,
     renderer: (item) => {
-      const cardEl = new Card(item, ".template_type_default", () => {
-        popupImage.open(item);
-      }).generateCard();
-
-      cardList.addItem(cardEl);
+      createCardEl(item);
+      cardList.addItem(createCardEl(item));
     },
   },
   elContainer
@@ -49,12 +53,15 @@ const cardList = new Section(
 cardList.renderItems();
 popupImage.setEventListeners();
 
+// Инициализация класса по добалению данных пользователя
+const userInfo = new UserInfo();
+
 // Инициализация попапа Профиль
 const popupProfile = new PopupWithForm({
   popupSelector: ".popup_type_profile",
-  handleFormSubmit: (item) => {
-    const userInfo = new UserInfo(item);
-    userInfo.setUserInfo();
+  handleFormSubmit: (data) => {
+    userInfo.setUserInfo(data);
+    popupProfile.close();
   },
 });
 popupProfile.setEventListeners();
@@ -63,20 +70,18 @@ popupProfile.setEventListeners();
 const popupMesto = new PopupWithForm({
   popupSelector: ".popup_type_mesto",
   handleFormSubmit: (item) => {
-    const cardEl = new Card(item, ".template_type_default", () => {
-      popupImage.open(item);
-    }).generateCard();
-
-    cardList.addItem(cardEl);
+    createCardEl(item);
+    popupMesto.close();
+    cardList.addItem(createCardEl(item));
   },
 });
 popupMesto.setEventListeners();
 
 // слушатель для попапа Профиль
 editButtonProfile.addEventListener("click", () => {
-  const userInfo = new UserInfo({}).getUserInfo();
-  topInputProfile.value = userInfo.name;
-  bottomInputProfile.value = userInfo.description;
+  const getUserInfo = userInfo.getUserInfo();
+  topInputProfile.value = getUserInfo.name;
+  bottomInputProfile.value = getUserInfo.description;
 
   popupProfile.open();
 

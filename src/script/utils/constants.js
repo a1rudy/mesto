@@ -41,13 +41,6 @@ export const validationConfig = {
   errorClass: "popup__input-error_active",
 };
 
-export const formsMesto = document
-  .querySelector(".popup_type_mesto")
-  .querySelector(".popup__form");
-
-export const addName = document.querySelector(".profile__name");
-export const addJob = document.querySelector(".profile__description");
-
 export const topInputProfile = document
   .querySelector(".popup_type_profile")
   .querySelector(".popup__input_type_top");

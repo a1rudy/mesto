@@ -13,7 +13,6 @@ export default class PopupWithForm extends Popup {
     this._inputList.forEach(
       (input) => (this._formValues[input.name] = input.value)
     );
-
     return this._formValues;
   }
 
@@ -23,6 +22,10 @@ export default class PopupWithForm extends Popup {
       evt.preventDefault();
       this._handleFormSubmit(this._getInputValues());
     });
+  }
+
+  setUserUX(span) {
+    this._popupForm.querySelector(".popup__button-span").textContent = span;
   }
 
   close() {

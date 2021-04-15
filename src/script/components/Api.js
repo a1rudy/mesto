@@ -1,3 +1,10 @@
+const handleResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Error: ${res.status}`);
+}
+
 export default class Api {
   constructor({address, token}) {
     this._address = address;
@@ -11,10 +18,7 @@ export default class Api {
         authorization: this._token
       }
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Редактирование профиля
   getUserProfile(data) {
@@ -29,10 +33,7 @@ export default class Api {
         about: data.about
       })
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Обновление аватара пользователя
   editUserAvatar(data) {
@@ -46,10 +47,7 @@ export default class Api {
         avatar: data.avatar,
       })
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Загрузка карточек с сервера
   getInitialCards() {
@@ -59,10 +57,7 @@ export default class Api {
         authorization: this._token
       }
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Добавление новой карточки
   addNewCard(data) {
@@ -77,10 +72,7 @@ export default class Api {
         link: data.link
       })
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Удаление карточки
   removeCard(id) {
@@ -90,10 +82,7 @@ export default class Api {
         authorization: this._token
       }
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Постановка лайка
   addLikeCard(id) {
@@ -103,10 +92,7 @@ export default class Api {
         authorization: this._token
       }
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
   // Снятие лайка
   removeLikeCard(id) {
@@ -116,9 +102,6 @@ export default class Api {
         authorization: this._token
       }
     })
-    .then(res => res.ok
-      ? res.json()
-      : Promise.reject(`Ошибка ${res.status}`)
-    )
+    .then(handleResponse)
   }
 }

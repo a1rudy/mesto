@@ -12,7 +12,6 @@ import {
 import FormValidator from "../script/components/FormValidator.js";
 import Section from "../script/components/Section.js";
 import Card from "../script/components/Card.js";
-import Popup from "../script/components/Popup.js";
 import PopupWithImage from "../script/components/PopupWithImage.js";
 import PopupWithForm from "../script/components/PopupWithForm.js";
 import UserInfo from "../script/components/UserInfo.js";
@@ -43,25 +42,23 @@ const api = new Api({
   token: "68ca3bd5-b72c-4fc3-8560-fd3e63ce58a1",
 });
 
-// Загрузка информации о пользователе с сервера
-api.setUserProfile()
-  .then((objectInfo) => {
+// Загрузка с сервера информации о пользователе на страницу и отрисовка массивов данных карточек
+let myId
+Promise.all([
+  api.setUserProfile(),
+  api.getInitialCards(),
+])
+  .then(([objectInfo, cardArr]) => {
+    myId = objectInfo._id;
+
     userInfo.setUserInfo(objectInfo);
+    cardList.renderItems(cardArr);
     console.log(objectInfo);
+    console.log(cardArr);
   })
   .catch((err) => {
     console.log(err);
-  });
-
-// Загрузка карточек с сервера
-api.getInitialCards()
-    .then((cardArr) => {
-      console.log(cardArr);
-      cardList.renderItems(cardArr);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  }); 
 
 // Добавление карточек на страницу из массива
 const cardList = new Section(
@@ -75,30 +72,39 @@ const cardList = new Section(
 );
 
 // Функция создания карточки
+let currentCard;
+let currentCardNode;
+
 const createCardEl = (item) => {
   const card = new Card({
-    data: item,
+    item: item,
     cardSelector: ".template_type_default",
     handleCardClick: (data) => popupImage.open(data),
-    handleDelClick: () => popupDelCard.open(),
-    handleDelSubmit: () => {
-      api.removeCard(card.getId())
-        .then(() => popupDelCard.close())
-        .catch(() => console.log("Ошибка удаления"));
+    handleDelClick: () => {
+      popupDelCard.open(),
+      currentCard = card.getCurrentCard();
+      currentCardNode = card.getCurrentCardNode();
     },
     handleLikeEl: () => {
-      api.addLikeCard(card.getId())
-        .then(() => console.log("Лайк"))
+      api.addLikeCard(card.getCurrentCard()._id)
+        .then((itemCard) => {
+          card.getLikeValue(itemCard);
+          console.log("Лайк");
+        })
         .catch(() => console.log("Ошибка постановки лайка"));
     },
     handleDelLikeEl: () => {
-      api.removeLikeCard(card.getId())
-        .then(() => console.log("Снятие лайка"))
+      api.removeLikeCard(card.getCurrentCard()._id)
+        .then((itemCard) => {
+          card.getLikeValue(itemCard);
+          console.log("Снятие лайка");
+        })
         .catch(() => console.log("Ошибка снятия лайка"));
     },
   });
-  return card.generateCard("ac1c001287afe7349962ccd7");
+  return card.generateCard(myId);
 };
+
 
 // Инициализация класса по добалению данных пользователя
 const userInfo = new UserInfo(
@@ -127,8 +133,8 @@ const popupProfile = new PopupWithForm({
   popupSelector: ".popup_type_profile",
   handleFormSubmit: (data) => {
     api.getUserProfile(data)
-      .then((objectInfo) => {
-        userInfo.setUserInfo(objectInfo);
+      .then((dataInfo) => {
+        userInfo.setUserInfo(dataInfo);
         popupProfile.setUserUX("Сохранение...");
         popupProfile.close();
       })
@@ -142,8 +148,8 @@ const popupMesto = new PopupWithForm({
   popupSelector: ".popup_type_mesto",
   handleFormSubmit: (item) => {
     api.addNewCard(item)
-      .then((objectCard) => {
-        const newCard = createCardEl(objectCard);
+      .then((itemCard) => {
+        const newCard = createCardEl(itemCard);
         cardList.addItemPrepend(newCard);
         popupMesto.setUserUX("Сохранение...");
         popupMesto.close();
@@ -158,7 +164,19 @@ const popupImage = new PopupWithImage(".popup_type_image");
 popupImage.setEventListeners();
 
 // Инициализация попапа "Удаление карточки"
-const popupDelCard = new Popup(".popup_type_delete");
+const popupDelCard = new PopupWithForm({
+  popupSelector: ".popup_type_delete",
+  handleFormSubmit: () => {
+    api.removeCard(currentCard._id)
+      .then(() => {
+        currentCardNode.remove();
+        popupDelCard.close()
+      })
+      .catch(() => {
+        console.log("Ошибка удаления")
+      } );
+  },
+  });
 popupDelCard.setEventListeners();
 
 // слушатель для попапа "Аватарка"

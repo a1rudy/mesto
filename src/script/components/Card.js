@@ -1,15 +1,13 @@
 export default class Card {
-  constructor({data, cardSelector, handleCardClick, handleDelClick, handleDelSubmit, handleLikeEl, handleDelLikeEl}) {
-    this._name = data.name;
-    this._link = data.link;
-    this._likesArr = data.likes;
-    this._userId = data.owner._id;
-    this._cardId = data._id;
-    this._data = data;
+  constructor({item, cardSelector, handleCardClick, handleDelClick, handleLikeEl, handleDelLikeEl}) {
+    this._name = item.name;
+    this._link = item.link;
+    this._likesArr = item.likes;
+    this._userId = item.owner._id;
+    this._card = item;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._handleDelClick = handleDelClick;
-    this._handleDelSubmit = handleDelSubmit;
     this._handleLikeEl = handleLikeEl;
     this._handleDelLikeEl = handleDelLikeEl;
   }
@@ -31,44 +29,37 @@ export default class Card {
 
   _getLikeEl() {
     this._handleLikeEl();
-    this._toggleLike()
-    if (Boolean(this._element.querySelector(".element__like-button_active"))) {
-      this._element.querySelector(".element__like-counter").textContent = this._likesArr.length + 1;
-    } else {
-      this._element.querySelector(".element__like-counter").textContent = this._likesArr.length;
+    this._toggleLike();
+    if (!Boolean(this._element.querySelector(".element__like-button_active"))) {
       this._handleDelLikeEl();
-    }
+    } // не перезагружая страницу позволяет с отправкой запроса снять поставленный лайк
   }
 
   _getDelLikeEl() {
     this._handleDelLikeEl();
-    this._toggleLike()
+    this._toggleLike();
     if (Boolean(this._element.querySelector(".element__like-button_active"))) {
-      this._element.querySelector(".element__like-counter").textContent = this._likesArr.length;
       this._handleLikeEl();
-    } else {
-      this._element.querySelector(".element__like-counter").textContent = this._likesArr.length - 1;
-    }
+    } // не перезагружая страницу позволяет с отправкой запроса вернуть снятый лайк
   }
 
-  _getRemoveEl() {
-    this._handleDelClick()
-    document.querySelector(".popup_type_delete").addEventListener("submit", (evt) => {
-      evt.preventDefault();
-      this._handleDelSubmit();
-      this._element.remove();
-    })
+  getLikeValue(item) {
+    this._element.querySelector(".element__like-counter").textContent = item.likes.length
   }
 
-  getId() {
-    return this._cardId;
+  getCurrentCardNode() {
+    return this._element
+  }
+
+  getCurrentCard() {
+    return this._card;
   }
 
   _setEventListeners(UserId) {
     this._element
       .querySelector(".element__image")
       .addEventListener("click", () => {
-        this._handleCardClick(this._data);
+        this._handleCardClick(this._card);
       });
 
     this._element
@@ -83,7 +74,7 @@ export default class Card {
 
     this._element
       .querySelector(".element__delete-button")
-      .addEventListener("click", () => this._getRemoveEl());
+      .addEventListener("click", () => this._handleDelClick());
   }
 
   generateCard(UserId) {

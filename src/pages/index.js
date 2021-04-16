@@ -56,8 +56,8 @@ Promise.all([
     console.log(objectInfo);
     console.log(cardArr);
   })
-  .catch((err) => {
-    console.log(err);
+  .catch((error) => {
+    console.log(error);
   }); 
 
 // Добавление карточек на страницу из массива
@@ -123,7 +123,7 @@ const popupAvatar = new PopupWithForm({
         popupAvatar.setUserUX("Сохранение...");
         popupAvatar.close();
       })
-      .catch((err) => console.log(err));
+      .catch((error) => console.log(ererrorr));
   },
 });
 popupAvatar.setEventListeners();
@@ -138,7 +138,7 @@ const popupProfile = new PopupWithForm({
         popupProfile.setUserUX("Сохранение...");
         popupProfile.close();
       })
-      .catch((err) => console.log(err));
+      .catch((error) => console.log(error));
   },
 });
 popupProfile.setEventListeners();
@@ -154,7 +154,7 @@ const popupMesto = new PopupWithForm({
         popupMesto.setUserUX("Сохранение...");
         popupMesto.close();
       })
-      .catch((err) => console.log(err));
+      .catch((error) => console.log(error));
   },
 });
 popupMesto.setEventListeners();

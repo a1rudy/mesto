@@ -16,6 +16,7 @@ import PopupWithImage from "../script/components/PopupWithImage.js";
 import PopupWithForm from "../script/components/PopupWithForm.js";
 import UserInfo from "../script/components/UserInfo.js";
 import Api from "../script/components/Api.js";
+import PopupSubmit from "../script/components/PopupSubmit.js";
 
 // Активация валидации форм
 const formProfileValidator = new FormValidator(
@@ -42,14 +43,18 @@ const api = new Api({
   token: "68ca3bd5-b72c-4fc3-8560-fd3e63ce58a1",
 });
 
+// Инициализация класса по добалению данных пользователя
+const userInfo = new UserInfo(
+  ".profile__name",
+  ".profile__about",
+  ".profile__avatar"
+);
+
 // Загрузка с сервера информации о пользователе на страницу и отрисовка массивов данных карточек
-let myId
-Promise.all([
-  api.setUserProfile(),
-  api.getInitialCards(),
-])
+let myInfo;
+Promise.all([api.setUserProfile(), api.getInitialCards()])
   .then(([objectInfo, cardArr]) => {
-    myId = objectInfo._id;
+    myInfo = objectInfo;
 
     userInfo.setUserInfo(objectInfo);
     cardList.renderItems(cardArr);
@@ -58,7 +63,7 @@ Promise.all([
   })
   .catch((error) => {
     console.log(error);
-  }); 
+  });
 
 // Добавление карточек на страницу из массива
 const cardList = new Section(
@@ -72,46 +77,48 @@ const cardList = new Section(
 );
 
 // Функция создания карточки
-let currentCard;
-let currentCardNode;
-
 const createCardEl = (item) => {
   const card = new Card({
     item: item,
+    myInfo: myInfo,
     cardSelector: ".template_type_default",
-    handleCardClick: (data) => popupImage.open(data),
-    handleDelClick: () => {
-      popupDelCard.open(),
-      currentCard = card.getCurrentCard();
-      currentCardNode = card.getCurrentCardNode();
+    handleCardClick: (card) => popupImage.open(card),
+    handleDelClick: (cardId) => {
+      popupDelCard.setSubmitAction(() => {
+        api.removeCard(cardId)
+          .then(() => {
+            card.removeCard();
+            popupDelCard.close();
+          })
+          .catch(() => {
+            console.log("Ошибка удаления");
+          });
+      });
+      popupDelCard.open();
     },
     handleLikeEl: () => {
       api.addLikeCard(card.getCurrentCard()._id)
         .then((itemCard) => {
-          card.getLikeValue(itemCard);
-          console.log("Лайк");
+          card.handleLike(itemCard);
         })
         .catch(() => console.log("Ошибка постановки лайка"));
     },
     handleDelLikeEl: () => {
       api.removeLikeCard(card.getCurrentCard()._id)
         .then((itemCard) => {
-          card.getLikeValue(itemCard);
-          console.log("Снятие лайка");
+          card.handleLike(itemCard);
         })
         .catch(() => console.log("Ошибка снятия лайка"));
     },
   });
-  return card.generateCard(myId);
+  return card.generateCard();
 };
 
-
-// Инициализация класса по добалению данных пользователя
-const userInfo = new UserInfo(
-  ".profile__name",
-  ".profile__about",
-  ".profile__avatar",
-);
+// Инициализация попапа "Удаление карточки"
+const popupDelCard = new PopupSubmit({
+  popupSelector: ".popup_type_delete",
+});
+popupDelCard.setEventListeners();
 
 // инициализация попапа "Аватарка"
 const popupAvatar = new PopupWithForm({
@@ -123,7 +130,7 @@ const popupAvatar = new PopupWithForm({
         popupAvatar.setUserUX("Сохранение...");
         popupAvatar.close();
       })
-      .catch((error) => console.log(ererrorr));
+      .catch((error) => console.log(error));
   },
 });
 popupAvatar.setEventListeners();
@@ -162,22 +169,6 @@ popupMesto.setEventListeners();
 // Инициализация попапа "Изображение"
 const popupImage = new PopupWithImage(".popup_type_image");
 popupImage.setEventListeners();
-
-// Инициализация попапа "Удаление карточки"
-const popupDelCard = new PopupWithForm({
-  popupSelector: ".popup_type_delete",
-  handleFormSubmit: () => {
-    api.removeCard(currentCard._id)
-      .then(() => {
-        currentCardNode.remove();
-        popupDelCard.close()
-      })
-      .catch(() => {
-        console.log("Ошибка удаления")
-      } );
-  },
-  });
-popupDelCard.setEventListeners();
 
 // слушатель для попапа "Аватарка"
 editButtonAvatar.addEventListener("click", () => {

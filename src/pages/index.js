@@ -52,7 +52,7 @@ const userInfo = new UserInfo(
 
 // Загрузка с сервера информации о пользователе на страницу и отрисовка массивов данных карточек
 let myInfo;
-Promise.all([api.setUserProfile(), api.getInitialCards()])
+Promise.all([api.getUserProfile(), api.getInitialCards()])
   .then(([objectInfo, cardArr]) => {
     myInfo = objectInfo;
 
@@ -139,7 +139,7 @@ popupAvatar.setEventListeners();
 const popupProfile = new PopupWithForm({
   popupSelector: ".popup_type_profile",
   handleFormSubmit: (data) => {
-    api.getUserProfile(data)
+    api.setUserProfile(data)
       .then((dataInfo) => {
         userInfo.setUserInfo(dataInfo);
         popupProfile.setUserUX("Сохранение...");

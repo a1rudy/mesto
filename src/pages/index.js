@@ -124,13 +124,15 @@ popupDelCard.setEventListeners();
 const popupAvatar = new PopupWithForm({
   popupSelector: ".popup_type_avatar",
   handleFormSubmit: (data) => {
+    popupAvatar.setUserUX(true);
+
     api.editUserAvatar(data)
       .then((objectInfo) => {
         userInfo.setUserInfo(objectInfo);
-        popupAvatar.setUserUX("Сохранение...");
         popupAvatar.close();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => popupAvatar.setUserUX(false));
   },
 });
 popupAvatar.setEventListeners();
@@ -139,13 +141,15 @@ popupAvatar.setEventListeners();
 const popupProfile = new PopupWithForm({
   popupSelector: ".popup_type_profile",
   handleFormSubmit: (data) => {
+    popupProfile.setUserUX(true);
+
     api.setUserProfile(data)
       .then((dataInfo) => {
         userInfo.setUserInfo(dataInfo);
-        popupProfile.setUserUX("Сохранение...");
         popupProfile.close();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => popupProfile.setUserUX(false));
   },
 });
 popupProfile.setEventListeners();
@@ -154,14 +158,16 @@ popupProfile.setEventListeners();
 const popupMesto = new PopupWithForm({
   popupSelector: ".popup_type_mesto",
   handleFormSubmit: (item) => {
+    popupMesto.setUserUX(true);
+
     api.addNewCard(item)
       .then((itemCard) => {
         const newCard = createCardEl(itemCard);
         cardList.addItemPrepend(newCard);
-        popupMesto.setUserUX("Сохранение...");
         popupMesto.close();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => popupMesto.setUserUX(false));
   },
 });
 popupMesto.setEventListeners();
@@ -172,7 +178,6 @@ popupImage.setEventListeners();
 
 // слушатель для попапа "Аватарка"
 editButtonAvatar.addEventListener("click", () => {
-  popupAvatar.setUserUX("Сохранить");
   popupAvatar.open();
 
   formAvatarValidator.checkButtonStateOpenPopup();
@@ -180,7 +185,6 @@ editButtonAvatar.addEventListener("click", () => {
 
 // слушатель для попапа "Профиль"
 editButtonProfile.addEventListener("click", () => {
-  popupProfile.setUserUX("Сохранить");
   const getUserInfo = userInfo.getUserInfo();
   topInputProfile.value = getUserInfo.name;
   bottomInputProfile.value = getUserInfo.about;
@@ -192,7 +196,6 @@ editButtonProfile.addEventListener("click", () => {
 
 // слушатель для попапа "Место"
 addButtonMesto.addEventListener("click", () => {
-  popupMesto.setUserUX("Создать");
   popupMesto.open();
   formCardValidator.checkButtonStateOpenPopup();
 });
